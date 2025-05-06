@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Issued Books";
+}
+
+<div class="p-4">
+    <h2>Issued Books</h2>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#issueBookModal">
+            Issue Book
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="issueBookModal" tabindex="-1" aria-labelledby="issueBookModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-3">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="issueBookModalLabel">Issue Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="studentDropdown" class="form-label">Person to be issued</label>
+                            <select class="form-select" id="studentDropdown">
+                                <option disabled selected>Select student</option>
+                                @foreach (var user in ViewBag.Students)
+                                {
+                                    <option value="@user.Id">@user.Username</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label for="bookDropdown" class="form-label">Book Name</label>
+                            <select class="form-select" id="bookDropdown">
+                                <option disabled selected>Select book</option>
+                                @foreach (var book in ViewBag.Books)
+                                {
+                                    <option value="@book.BookId">@book.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="issueBook()">Issue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issued Books Table -->
+    <table class="table table-hover table-striped table-bordered rounded-3 shadow-lg">
+        <thead class="table-primary">
+            <tr>
+                <th>Issue Date</th>
+                <th>Person to which book is issued</th>
+                <th>Book Id</th>
+                <th>Book Name</th>
+            </tr>
+        </thead>
+        <tbody id="issuedBooksTableBody">
+            @foreach (var item in ViewBag.IssuedBooks)
+            {
+                <tr>
+                    <td>@item.IssueDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.StudentName</td>
+                    <td>@item.BookId</td>
+                    <td>@item.BookName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function issueBook() {
+        const studentSelect = document.getElementById("studentDropdown");
+        const bookSelect = document.getElementById("bookDropdown");
+
+        const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+        const bookId = bookSelect.value;
+        const bookName = bookSelect.options[bookSelect.selectedIndex].text;
+
+        if (!bookId || studentSelect.selectedIndex === 0) {
+            alert("Please select both a student and a book.");
+            return;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+
+        const data = {
+            StudentName: studentName,
+            BookId: parseInt(bookId),
+            BookName: bookName,
+            IssueDate: today
+        };
+
+        const newRow = `
+            <tr>
+                <td>${today}</td>
+                <td>${studentName}</td>
+                <td>${bookId}</td>
+                <td>${bookName}</td>
+            </tr>
+        `;
+        document.getElementById("issuedBooksTableBody").insertAdjacentHTML("beforeend", newRow);
+
+        studentSelect.selectedIndex = 0;
+        bookSelect.selectedIndex = 0;
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById("issueBookModal"));
+        modal.hide();
+
+        fetch('/Dashboard/IssueBook', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            if (!res.success) {
+                alert("Failed to issue book: " + res.error);
+                document.getElementById("issuedBooksTableBody").lastElementChild.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred while issuing the book.");
+            document.getElementById("issuedBooksTableBody").lastElementChild.remove();
+        });
+    }
+</script>

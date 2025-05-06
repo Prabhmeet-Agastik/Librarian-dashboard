@@ -1,0 +1,40 @@
+﻿@model List<LibraryDashboard2.Areas.Student.Models.LateFeeView>
+
+@{
+    ViewData["Title"] = "Late Fees";
+}
+
+<h2>Late Fee Report</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Student Name</th>
+                <th>Issue Date</th>
+                <th>Days Overdue</th>
+                <th>Fee (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.BookId</td>
+                    <td>@item.BookName</td>
+                    <td>@item.StudentName</td>
+                    <td>@item.IssueDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.DaysOverdue</td>
+                    <td>@item.Fee</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No late fees currently.</p>
+}

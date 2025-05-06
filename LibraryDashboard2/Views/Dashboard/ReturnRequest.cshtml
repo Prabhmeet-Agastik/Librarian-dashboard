@@ -1,0 +1,70 @@
+﻿
+@model IEnumerable<LibraryDashboard2.Models.ReturnBookRequest>
+
+@{
+    ViewData["Title"] = "Return Request";
+}
+<h3>Return Request</h3>
+<div>List of return Requests.....</div>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book Id</th>
+                <th>Username</th>
+                <th>Request date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.BookId</td>
+                    <td>@book.Username</td>
+                    <td>@book.RequestDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button id ="return" class="btn btn-sm btn-warning return-button" data-bookid="@book.BookId" data-bookname="@book.Username">
+                            Accept
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+        $(document).on('click','.return-button', function () {
+                var bookId = $(this).data('bookid');
+                var username = $(this).data('bookname');
+
+                if (confirm("Are you sure you want to accept this return request?")) {
+                    $.ajax({
+                        url: '/Dashboard/AcceptReturn',
+                        type: 'POST',
+                        data: { bookId: bookId, username: username },
+                        success: function (result) {
+                            if (result.success) {
+                                // Remove the row from the table
+                                location.reload(); // reload page or remove row dynamically
+                            } else {
+                                alert("Error: " + result.message);
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while processing the request.");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+

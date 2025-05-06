@@ -1,0 +1,29 @@
+﻿
+
+<div style="width: 250px;">
+<div class="bg-light border-end" id="sidebar-wrapper" style="min-height:100vh;">
+        <div class="d-flex align-items-center justify-content-center sidebar-heading border-bottom bg-primary text-white fw-bold p-4 sidebar" style="cursor: pointer;" onclick="loadContent('DashboardHome')">
+        Library Dashboard
+    </div>
+        <div class="list-group list-group-flush text-center">
+            <a href="IssuedBooks" class="list-group-item list-group-item-action py-3 px-4" onclick="loadContent('IssuedBooks')">
+                <i class="bi bi-book me-2"></i>Issued Books
+            </a>
+            <a href="AvailableBooks" class="list-group-item list-group-item-action py-3 px-4" onclick="loadContent('AvailableBooks')">
+                <i class="bi bi-bookmark me-2"></i>Available Books
+            </a>
+            <a href="LateFees" class="list-group-item list-group-item-action py-3 px-0" onclick="loadContent('LateFees')">
+                <i class="bi bi-clock me-0"></i>Late Fees
+            </a>
+
+            <a href="ReturnRequest" class="list-group-item list-group-item-action py-3 px-0" onclick="loadContent('ReturnRequest')">
+                <i class="bi bi-clock me-0"></i>Return Request
+            </a>
+        </div>
+
+</div>
+
+@* <div id="main-content" class="p-4 flex-grow-1 bg-light">
+    <!-- Dynamic content will be loaded here -->
+</div> *@
+</div>

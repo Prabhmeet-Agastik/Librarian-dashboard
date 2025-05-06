@@ -1,0 +1,169 @@
+﻿@* @model IEnumerable<LibraryDashboard2.Areas.Student.Models.IssuedBook>
+
+@{
+    ViewData["Title"] = "Issued Books";
+}
+<h3>Issued Books</h3>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Issue Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.BookName</td>
+                    <td>@book.IssueDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning return-button" data-bookid="@book.BookId" data-bookname="@book.BookName">
+                            Return
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No books have been issued to you yet.</p>
+}
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Return Request Sent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Your return request for <strong id="bookTitleInModal"></strong> has been sent.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script>
+        $(document).ready(function () {
+            $("#main-content").on("click", ".return-button", function () {
+                const bookName = $(this).data("bookname");
+                const bookId = $(this).data("bookid");
+
+                // Set book name in modal
+                $("#bookTitleInModal").text(bookName);
+
+                console.log("Return requested for Book ID: " + bookId);
+
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+                modal.show();
+            });
+        });
+    </script>
+} *@
+
+
+@model IEnumerable<LibraryDashboard2.Areas.Student.Models.IssuedBook>
+
+@{
+    ViewData["Title"] = "Issued Books";
+}
+<h3>Issued Books</h3>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book Id</th>
+                <th>Issue Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.BookId</td>
+                    <td>@book.BookName</td>
+                    <td>@book.IssueDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button id ="return-btn" class="btn btn-sm btn-warning return-button" data-bookid="@book.BookId" data-bookname="@book.BookName">
+                            Return
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No books have been issued to you yet.</p>
+}
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Return Request Sent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Your return request for <strong id="bookTitleInModal"></strong> has been sent.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+  
+
+    $(document).ready(function () {
+        console.log("inside return function");
+        $(document).on('click','.return-button', function () {
+            const bookId = $(this).data("bookid");
+            const bookName = $(this).data("bookname");
+                const returnBookUrl = '@Url.Action("ReturnBook", "Dashboard", new { area = "Student" })';
+                console.log(bookId,"bookid");
+                console.log(bookName, "BookName");
+            $.ajax({
+                 url: returnBookUrl,
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function () {
+                    $("#bookTitleInModal").text(bookName);
+                    const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+                    modal.show();
+                },
+                error: function () {
+                    alert("Return request failed.");
+                }
+            });
+        });
+    });
+</script>
+

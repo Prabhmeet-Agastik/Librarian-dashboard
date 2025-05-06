@@ -1,0 +1,57 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.sidebar {
+    background: linear-gradient(195deg, #2c3e50 0%, #3498db 100%);
+}
+
+.nav-link {
+    border-radius: 8px;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+}
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .nav-link.active {
+        background: rgba(255, 255, 255, 0.15) !important;
+        font-weight: 500;
+    }
+
+.card.bg-primary-dark {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+.progress {
+    background: rgba(255, 255, 255, 0.1);
+}

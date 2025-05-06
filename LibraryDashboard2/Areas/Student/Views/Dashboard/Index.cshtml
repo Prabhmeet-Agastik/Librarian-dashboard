@@ -1,0 +1,226 @@
+﻿@* @{
+    // Layout = null;
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="d-flex" style="height: 100vh;">
+        <!-- Sidebar -->
+        <div class="bg-light border-end" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
+            <div class="d-flex align-items-center justify-content-center sidebar-heading border-bottom bg-primary text-white fw-bold p-4 sidebar" style="cursor: pointer;">
+                Library Dashboard
+            </div>
+            <div class="list-group list-group-flush text-center" style="cursor: pointer;">
+                <!-- Update data-url with ASP.NET Core's Url.Action -->
+                <a class="list-group-item list-group-item-action py-3 px-4 nav-link" data-url="@Url.Action("AvailableBooks", "Dashboard")">
+                    <i class="bi bi-bookmark me-2"></i>Available Books
+                </a>
+                <a class="list-group-item list-group-item-action py-3 px-4 nav-link" data-url="@Url.Action("IssuedBooks", "Dashboard")">
+                    <i class="bi bi-book me-2"></i>Issued Books
+                </a>
+                <a class="list-group-item list-group-item-action py-3 px-0 nav-link" data-url="@Url.Action("LateFees", "Dashboard")">
+                    <i class="bi bi-clock me-0"></i>Late Fees
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="p-4 flex-grow-1 bg-light">
+            <h3>Welcome to the Library Dashboard</h3>
+            <p>Select an item from the sidebar to view content.</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".nav-link").click(function (e) {
+                e.preventDefault();
+                console.log("Sidebar clicked");
+
+                // Remove active class from all links
+                $(".nav-link").removeClass("active");
+
+                // Add active class to the clicked link
+                $(this).addClass("active");
+
+                const url = $(this).data("url");
+                history.pushState(null, "", url);
+
+
+                $("#main-content").load(url, function (response, status, xhr) {
+                    if (status === "error") {
+                        console.error("Error loading:", xhr.status, xhr.statusText);
+                        $("#main-content").html("<p>Error loading content.</p>");
+                    }
+
+
+                });
+
+                     // Handle browser back/forward
+                  window.onpopstate = function () {
+                    const currentUrl = location.pathname;
+                     $("#main-content").load(currentUrl);
+                     };
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
+ *@
+
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="d-flex" style="height: 100vh;">
+        <!-- Sidebar -->
+        <div class="bg-light border-end" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
+            <div class="d-flex align-items-center justify-content-center sidebar-heading border-bottom bg-primary text-white fw-bold p-4 sidebar" style="cursor: pointer;">
+                Library Dashboard
+            </div>
+            <div class="list-group list-group-flush text-center" style="cursor: pointer;">
+                <!-- Update data-url with ASP.NET Core's Url.Action -->
+                <a class="list-group-item list-group-item-action py-3 px-4 nav-link" data-url="@Url.Action("AvailableBooks", "Dashboard")">
+                    <i class="bi bi-bookmark me-2"></i>Available Books
+                </a>
+                <a class="list-group-item list-group-item-action py-3 px-4 nav-link" data-url="@Url.Action("IssuedBooks", "Dashboard")">
+                    <i class="bi bi-book me-2"></i>Issued Books
+                </a>
+                <a class="list-group-item list-group-item-action py-3 px-0 nav-link" data-url="@Url.Action("LateFees", "Dashboard")">
+                    <i class="bi bi-clock me-0"></i>Late Fees
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content" class="p-4 flex-grow-1 bg-light">
+
+            <h3>Welcome to the Library Dashboard</h3>
+            <p>Select an item from the sidebar to view content.</p>
+            
+        </div>
+   @*     
+   <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+            @Html.AntiForgeryToken()
+       <button type ="submit" id="topRightButton" class="btn btn-primary" style="z-index: 1050; margin-right: 25px; margin-top: 20px; margin-left: 25px;">
+                LogOut
+            </button>
+        </form> *@
+
+        <form action="@Url.Action("Logout", "Dashboard", new { area = "Student" })" method="post">
+
+            <button id="topRightButton" class="btn btn-primary" style="z-index: 1050; margin-right: 25px; margin-top: 20px; margin-left: 25px;">
+                LogOut
+            </button>
+            </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".nav-link").click(function (e) {
+                e.preventDefault();
+                console.log("Sidebar clicked");
+
+                // Remove active class from all links
+                $(".nav-link").removeClass("active");
+
+                // Add active class to the clicked link
+                $(this).addClass("active");
+
+                const url = $(this).data("url");
+                history.pushState(null, "", url);
+
+                // Load new content into #main-content
+                $("#main-content").load(url, function (response, status, xhr) {
+                    if (status === "error") {
+                        console.error("Error loading:", xhr.status, xhr.statusText);
+                        $("#main-content").html("<p>Error loading content.</p>");
+                    } else {
+                        // Rebind modal event after content is loaded
+                        bindReturnButtonClick();
+                    }
+                });
+
+                // Handle browser back/forward
+                window.onpopstate = function () {
+                    const currentUrl = location.pathname;
+                    $("#main-content").load(currentUrl, function () {
+                        // Rebind modal event after content is loaded
+                        bindReturnButtonClick();
+                    });
+                };
+            });
+
+            // Ensure modal backdrop is removed after modal is hidden
+            $('#returnModal').on('hidden.bs.modal', function () {
+                // Explicitly remove lingering backdrop
+                $('.modal-backdrop').remove();
+                console.log("Modal closed and backdrop removed.");
+            });
+
+            // Function to bind modal event to return buttons
+            function bindReturnButtonClick() {
+                $("#main-content").on("click", ".return-button", function () {
+                    const bookName = $(this).data("bookname");
+                    $("#bookTitleInModal").text(bookName);
+
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('returnModal'));
+                    modal.show();
+                    
+                    
+                    modal._backdrop.hide();
+                });
+            }
+
+            // Initially bind the return button click event when the page loads
+            bindReturnButtonClick();
+        });
+    </script>
+
+     <!-- Modal -->
+    @* <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="returnModalLabel">Return Request Sent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Your return request for <strong id="bookTitleInModal"></strong> has been sent.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>  *@
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibraryDashboard2</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibraryDashboard2.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    @{
+        var currentRoute = Context.Request.Path.Value.ToLower();
+        var isDashboard = currentRoute.Contains("/dashboard");
+    }
+
+    @if (isDashboard)
+    {
+        <div class="d-flex" id="wrapper">
+            @Html.Partial("_Sidebar")
+
+            <div id="main-content" class="p-4 flex-grow-1">
+                @RenderBody()
+                <form action="/Account/Logout" method="post" id="logoutForm">
+                    <button id="topRightButton" class="btn btn-primary" style="z-index: 1050; margin-right: 25px; margin-top: 20px; margin-left: 25px;">
+                        LogOut
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="main-content" class="p-4 flex-grow-1 position-relative" >
+
+            
+
+            @RenderBody()
+            
+        </div>
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
