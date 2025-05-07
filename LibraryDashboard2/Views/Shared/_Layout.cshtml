@@ -24,6 +24,7 @@
             <div id="main-content" class="p-4 flex-grow-1">
                 @RenderBody()
                 <form action="/Account/Logout" method="post" id="logoutForm">
+                    @Html.AntiForgeryToken()
                     <button id="topRightButton" class="btn btn-primary" style="z-index: 1050; margin-right: 25px; margin-top: 20px; margin-left: 25px;">
                         LogOut
                     </button>

@@ -3,6 +3,18 @@
 @{
     
     ViewData["Title"] = "Available Books";
+
+    var groupedBooks = Model
+       .Where(b => !b.IsIssued)
+       .GroupBy(b => b.BookId)
+       .Select(g => new
+       {
+           BookId = g.Key,
+           Title = g.First().Title,
+           Author = g.First().Author,
+           Genre = g.First().Genre,
+           AvailableCount = g.Count()
+       }).ToList();
 }
 
 <div class="p-4">
@@ -25,14 +37,14 @@
             </tr>
         </thead>
         <tbody id="bookTableBody">
-            @foreach (var book in Model)
+            @foreach (var book in groupedBooks)
             {
                 <tr>
                     <td>@book.BookId</td>
                     <td>@book.Title</td>
                     <td>@book.Author</td>
                     <td>@book.Genre</td>
-                    <td>@book.Quantity</td>
+                    <td>@book.AvailableCount</td>
                 </tr>
             }
         </tbody>

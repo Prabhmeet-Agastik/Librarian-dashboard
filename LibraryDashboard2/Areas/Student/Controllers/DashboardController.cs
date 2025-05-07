@@ -103,10 +103,11 @@ namespace LibraryDashboard2.Areas.Student.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
-            return RedirectToAction("Login", "User", new { area = "Student" });
+            return RedirectToAction("Login","Account");
 
         }
 
+        
 
 
         private string GetUsernameFromJwtCookie()
